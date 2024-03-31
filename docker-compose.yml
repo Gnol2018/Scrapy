@@ -1,0 +1,17 @@
+version: '3.10'
+
+services:
+  scrapy:
+    build: 
+      context: .
+      dockerfile: Dockerfile.scrapy
+    volumes:
+      - .:/app
+    command: ["bash", "-c", "tail -f /dev/null"]
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "8000:8000"

@@ -13,14 +13,9 @@ class GpuSpider(scrapy.Spider):
 
     def parse(self, response):
         gpu_items = response.xpath("//div[@class='product-item']")
-        
-        print(f"len(gpu_items): {len(gpu_items)}")
         for item in gpu_items:
-            test = item.xpath(".//h3").get()
-            print(f"test here: {test}")
-        filename = "gpu_titles_and_prices.html"
-        with open(filename, "a", encoding="utf-8") as file:
-            file.write(f"{gpu_items}")
+            gpu_link = item.xpath(".//h3/a/@href").get()
+            gpu_name = item.xpath(".//h3/a/text()").get()
+            gpu_price = item.xpath(".//p[@class='pdPrice']/span/text()").get()
+            print(f"{gpu_name}: {gpu_price} - Link: {gpu_link}")
 
-
-        # self.log(f"Saved file {filename}")
