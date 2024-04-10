@@ -1,4 +1,3 @@
-from pathlib import Path
 import scrapy
 
 class GpuSpider(scrapy.Spider):
@@ -12,6 +11,7 @@ class GpuSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
+        print("working here")
         gpu_items = response.xpath("//div[@class='product-item']")
         for item in gpu_items:
             gpu_link = item.xpath(".//h3/a/@href").get()
