@@ -4,7 +4,7 @@ from celery import Celery
 from celery.schedules import crontab
 from celery_worker.tasks import run_spider
 
-app = Celery('tasks', broker='amqp://guest:guest@localhost//')
+app = Celery('tasks', broker='amqp://guest:guest@rabbitmq:5672//')
 
 app.conf.beat_schedule = {
     'run-spider-every-hour': {

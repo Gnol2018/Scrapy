@@ -4,7 +4,7 @@ services:
   scrapy:
     build: 
       context: .
-      dockerfile: Dockerfile.scrapy
+      dockerfile: docker/Dockerfile.scrapy
     volumes:
       - .:/app
     command: ["bash", "-c", "tail -f /dev/null"]
@@ -12,6 +12,30 @@ services:
   fastapi:
     build:
       context: .
-      dockerfile: Dockerfile.fastapi
+      dockerfile: docker/Dockerfile.fastapi
     ports:
       - "8000:8000"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # RabbitMQ default port
+      - "15672:15672"  # RabbitMQ management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # Persist RabbitMQ data
+
+  celery-worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.celery
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbitmq
+
+volumes:
+  rabbitmq_data:
+    driver: local
+
+  
+  

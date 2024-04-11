@@ -1,0 +1,33 @@
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the main.py file from the fast-api-app directory into the container at /app
+COPY fast-api-app/main.py /app/
+
+# Copy the requirements.txt file from the fast-api-app directory into the container at /app
+COPY requirements.txt /app/
+
+# Install Python dependencies from requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set up Scrapy environment
+RUN apt-get update && apt-get install -y \
+    libxml2-dev \
+    libxslt-dev \
+    libffi-dev \
+    libssl-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Scrapy
+RUN pip install scrapy
+
+# Copy the local directory into the container at /app
+COPY . /app
+
+# Command to run the FastAPI application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
